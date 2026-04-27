@@ -40,15 +40,51 @@ Use the trained model to predict  for a new input value .
 
 ## PROGRAM
 
-### Name:
+### Name: PREM R
 
-### Register Number:
+### Register Number: 212223240124
 
 ```python
 class Model(nn.Module):
-    def __init__(self, in_features, out_features):
-        super().__init__()
-        #Include your code here
+    def __init__(self, in_features, out_features):  
+        super().__init__()      
+        self.linear = nn.Linear(in_features, out_features)   
+        
+    def forward(self, x):    
+        y_pred = self.linear(x)
+        return y_pred
+torch.manual_seed(59)
+model = Model(1, 1)
+model.linear.weight.item()
+model.linear.bias.item()
+criterion = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr = 0.001)
+epochs = 50 
+losses = []
+
+for i in range(epochs):
+
+    i = i +1   
+    y_pred = model.forward(X) 
+    loss = criterion(y_pred, y)
+    losses.append(loss.item())
+    print(f'epoch: {i}  loss: {loss.item()}  weight: {model.linear.weight.item()} bias: {model.linear.bias.item()}') 
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+plt.plot(range(epochs), losses)
+
+plt.ylabel('MSE Loss')
+plt.xlabel('Epoch')
+plt.show()
+x = np.linspace(0.0,50.0,50)
+current_weight = model.linear.weight.item()
+current_bias = model.linear.bias.item()
+
+predicted_y = current_weight * x + current_bias
+plt.scatter(X, y)
+
+plt.plot(x,predicted_y, 'r')
 
 
 
@@ -57,15 +93,17 @@ class Model(nn.Module):
 ```
 
 ### Dataset Information
-Include screenshot of the generated data
+<img width="873" height="746" alt="image" src="https://github.com/user-attachments/assets/59cd38dc-5ece-4fc5-a179-b578553078e7" />
+
 
 ### OUTPUT
 Training Loss Vs Iteration Plot
-Best Fit line plot
-Include your plot here
+<img width="777" height="544" alt="image" src="https://github.com/user-attachments/assets/10f20f5b-87a8-4747-b331-d9f1968e1427" />
 
-### New Sample Data Prediction
-Include your sample input and output here
+Best Fit line plot
+<img width="788" height="563" alt="image" src="https://github.com/user-attachments/assets/327f51ea-cbad-45e3-8ec1-ea0cc58930d3" />
+
+
 
 ## RESULT
 Thus, a neural network regression model was successfully developed and trained using PyTorch.
